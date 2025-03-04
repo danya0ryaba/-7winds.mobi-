@@ -2,17 +2,32 @@
 @use 'variables/variables';
 
 body {
-    font-family: "Inter", 'Arial', sans-serif;
+    font-family: "Roboto", sans-serif;
     font-weight: 400;
-    background-color: #F3F7F8;
+    background-color: #27272A;
+    color: #FFFFFF;
+    font-size: 14px;
+    line-height: 16.41px;
     box-sizing: border-box;
+}
+
+.wrapper {
     overflow-x: hidden;
-    padding-bottom: 100px;
+    width: 100%;
+    background-color: #27272A;
+    position: relative;
+}
+
+.content {
+    width: calc(100vw - 234px);
+    position: absolute;
+    top: 47px;
+    left: 234px;
+    background-color: #202124;
 }
 
 .container {
-    margin: 0 auto;
     width: 100%;
-    max-width: 1330px;
-    padding: 0 15px;
+    // max-width: 100%;
+    padding: 0 9px;
 }
