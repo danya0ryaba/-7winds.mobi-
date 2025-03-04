@@ -38,9 +38,11 @@
                     cursor: pointer;
                     position: relative;
 
+                    // ---
+
                     &::before {
                         content: '';
-                        width: 11px;
+                        width: 12px;
                         height: 1px;
                         background-color: #C6C6C6;
                         position: absolute;
@@ -48,26 +50,23 @@
                         left: -8px;
                     }
 
+                    //  |
+                    //  |
+                    //  |
+
                     &::after {
                         content: '';
                         width: 1px;
-                        height: 53px;
+                        height: 60px;
                         background-color: #C6C6C6;
                         position: absolute;
-                        top: 9px;
-                        left: 11.5px;
+                        bottom: 14px;
+                        left: -8px;
+                        z-index: 1;
                     }
+
                 }
 
-                // &::before {
-                //     content: '';
-                //     width: 11px;
-                //     height: 1px;
-                //     background-color: #C6C6C6;
-                //     position: absolute;
-                //     top: 12px;
-                //     left: 12px;
-                // }
 
             }
 

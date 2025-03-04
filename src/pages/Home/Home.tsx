@@ -1,6 +1,9 @@
 import { Table } from '../../components/Table/Table'
 import style from './Home.module.scss'
 
+const rows = [0, 1, 2, 2]
+const rows2 = [0, 1, 2, 2]
+
 export const Home = () => {
     return (
         <main>
@@ -25,7 +28,8 @@ export const Home = () => {
                         </ul>
                     </div>
                 </div>
-                <Table />
+                <Table values={rows} />
+                <Table values={rows2} />
             </div>
 
 
