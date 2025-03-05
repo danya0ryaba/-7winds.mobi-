@@ -1,15 +1,19 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userReducer from './reducers/useSlice'
-
+import { rowsApi } from './API/rowsApi'
 
 export const rootReducer = combineReducers({
-    userReducer
+    userReducer,
+    [rowsApi.reducerPath]: rowsApi.reducer
 })
 
 export const setupStore = () => {
-    return configureStore({
-        reducer: rootReducer
-    })
+    return configureStore(
+        {
+            reducer: rootReducer,
+            middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(rowsApi.middleware)
+        }
+    )
 }
 
 export type RootState = ReturnType<typeof rootReducer>

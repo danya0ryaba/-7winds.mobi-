@@ -16,7 +16,6 @@ export const Input: React.FC<InputType> = ({
     ...otherProps
 }) => {
     return (
-        // <div className={`${style.wrapper_input} ${className}`}>
         <input
             name={name}
             className={`${style.input} ${className}`}
@@ -24,6 +23,5 @@ export const Input: React.FC<InputType> = ({
             placeholder={placeholder}
             {...otherProps}
         />
-        // </div>
     )
 }

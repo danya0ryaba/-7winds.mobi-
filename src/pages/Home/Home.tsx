@@ -1,12 +1,16 @@
 import { Table } from '../../components/Table/Table'
+import { table_title } from '../../constants/constants'
+import { useGetRowsQuery } from '../../store/API/rowsApi'
 
 import style from './Home.module.scss'
 
-const rows = [0, 1, 2, 2]
-const table_title = ['Основная з/п', 'Оборудование', 'Накладные расходы', 'Сметная прибыль']
-// const rows = [0, 1]
+const rows2 = [0, 1, 2, 2]
 
 export const Home = () => {
+
+    const { data: rows, isLoading, isError } = useGetRowsQuery('')
+    console.log(rows, isLoading, isError)
+
     return (
         <main>
             <div className={style.home_tab}>
@@ -27,7 +31,7 @@ export const Home = () => {
                         </ul>
                     </div>
                 </div>
-                <Table values={rows} />
+                <Table values={rows2} />
             </div>
         </main>
     )
