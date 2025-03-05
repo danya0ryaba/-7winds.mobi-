@@ -2,9 +2,9 @@ import { Table } from '../../components/Table/Table'
 
 import style from './Home.module.scss'
 
-const rows = [0, 1, 2, 2, 3]
+const rows = [0, 1, 2, 2]
 const table_title = ['Основная з/п', 'Оборудование', 'Накладные расходы', 'Сметная прибыль']
-// const rows = [0]
+// const rows = [0, 1]
 
 export const Home = () => {
     return (
@@ -29,8 +29,6 @@ export const Home = () => {
                 </div>
                 <Table values={rows} />
             </div>
-
-
         </main>
     )
 }
