@@ -23,8 +23,6 @@
         display: flex;
         align-items: center;
 
-
-
         &_list {
             display: flex;
             align-items: center;
@@ -65,17 +63,39 @@
                         z-index: 1;
                     }
 
+                    .data_svg_active {
+                        cursor: pointer;
+                        background-color: #414144;
+                    }
+
                 }
 
 
             }
 
+            .input_name {
+                width: 100%;
+            }
+
             .row__name {
-                width: auto;
+                width: 100%;
+
+                &:last-child {
+                    width: 733px;
+
+                    @media (max-width:1920px) {
+                        width: auto;
+                    }
+                }
+
             }
 
             .row__text {
                 width: 200px;
+            }
+
+            .row__input {
+                width: 176px;
             }
 
         }

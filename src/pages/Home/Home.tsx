@@ -1,8 +1,10 @@
 import { Table } from '../../components/Table/Table'
+
 import style from './Home.module.scss'
 
-const rows = [0, 1, 2, 2]
-const rows2 = [0, 1, 2, 2]
+const rows = [0, 1, 2, 2, 3]
+const table_title = ['Основная з/п', 'Оборудование', 'Накладные расходы', 'Сметная прибыль']
+// const rows = [0]
 
 export const Home = () => {
     return (
@@ -21,15 +23,11 @@ export const Home = () => {
                     </div>
                     <div className={style.table_title__item}>
                         <ul>
-                            <li>Основная з/п</li>
-                            <li>Оборудование</li>
-                            <li>Накладные расходы</li>
-                            <li>Сметная прибыль</li>
+                            {table_title.map(item => <li key={item}>{item}</li>)}
                         </ul>
                     </div>
                 </div>
                 <Table values={rows} />
-                <Table values={rows2} />
             </div>
 
 
