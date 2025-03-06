@@ -1,4 +1,5 @@
-type CurrentRowType = {
+export type CurrentRowType = {
+    child: CurrentRowType[]
     equipmentCosts: number,
     estimatedProfit: number,
     id: number,
@@ -14,11 +15,9 @@ type CurrentRowType = {
 }
 
 // GET ROWS
-//  УБРАТЬ unknown
-export type RowType = { child: unknown[] } & CurrentRowType
+export type RowType = { child: CurrentRowType[] | [null] } & CurrentRowType
 
 // CREATE ROW
-
 export type RequestBodyType = {
     equipmentCosts: number,
     estimatedProfit: number,
@@ -37,8 +36,8 @@ export type ResponseBodyType = {
     current: CurrentRowType,
     changed: CurrentRowType[]
 }
-// UPDATE ROW
 
+// UPDATE ROW
 export type UpdateRequestBodyType = {
     rId: string
     body: Omit<CurrentRowType, 'id' | 'total'>

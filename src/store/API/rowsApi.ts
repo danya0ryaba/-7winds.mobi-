@@ -30,7 +30,7 @@ export const rowsApi = createApi({
             })
         }),
 
-        deleteRow: builder.mutation<ResponseBodyType, string>({
+        deleteRow: builder.mutation<ResponseBodyType, number>({
             query: (rId) => ({
                 url: `${eId}/row/${rId}/delete`,
                 method: 'DELETE',
@@ -40,4 +40,4 @@ export const rowsApi = createApi({
     }),
 })
 
-export const { useGetRowsQuery } = rowsApi
+export const { useGetRowsQuery, useCreateRowMutation, useUpdateRowMutation, useDeleteRowMutation } = rowsApi
