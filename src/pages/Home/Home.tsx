@@ -1,12 +1,24 @@
+import { useEffect } from 'react'
 import { Table } from '../../components/Table/Table'
 import { table_title } from '../../constants/constants'
 import { useGetRowsQuery } from '../../store/API/rowsApi'
+import { useAppDispatch, useAppSelector } from '../../store/hooks/redux'
+import { setRows } from '../../store/reducers/useRows'
 
 import style from './Home.module.scss'
 
 export const Home = () => {
 
+    const dispatch = useAppDispatch()
+
+    // const { rows }=useAppSelector(state => state.rowsReducer)
+
     const { data: rows, isLoading, isError } = useGetRowsQuery();
+
+    useEffect(() => {
+        if (!rows) return
+        dispatch(setRows(rows))
+    }, [rows, dispatch])
 
     if (isLoading) {
         return <h1>Loading...</h1>
@@ -36,7 +48,7 @@ export const Home = () => {
                         </ul>
                     </div>
                 </div>
-                <Table rowsArray={rows || []} />
+                <Table rowsArray={Array.isArray(rows) ? rows : []} />
             </div>
         </main>
     )

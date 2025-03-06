@@ -1,24 +1,34 @@
 import { useState } from 'react'
 import { Input } from '../Input/Input'
-import { RowType } from '../../types/types'
+import { CurrentRowType } from '../../types/types'
 
 import style from './Row.module.scss'
-import { useDeleteRowMutation } from '../../store/API/rowsApi'
+import { useAppDispatch } from '../../store/hooks/redux'
+import { newRow } from '../../store/reducers/useRows'
 
-type RowTypeProps = { className?: string, paddingLeft?: number } & RowType
+type RowTypeProps = {
+    className?: string
+    paddingLeft?: number
+    isFirstRow: boolean
+    deleteRow: () => void
+    // updateRow: () => void
+} & CurrentRowType
 
 export const Row: React.FC<RowTypeProps> = ({
     id,
-    total,
     rowName,
     salary,
     equipmentCosts,
     overheads,
     estimatedProfit,
     className = '',
-    paddingLeft
+    paddingLeft,
+    isFirstRow,
+    deleteRow,
+    // updateRow,
 }) => {
 
+    const dispatch = useAppDispatch()
     // for list prices rows
     const [modeNotEdit, setModeNotEdit] = useState<Array<number | string>>([salary, equipmentCosts, overheads, estimatedProfit]);
     const [editIndex, setEditIndex] = useState<null | number>(null); // Индекс редактируемого элемента
@@ -46,35 +56,51 @@ export const Row: React.FC<RowTypeProps> = ({
             newModeNotEdit[editIndex] = editValue;
             setModeNotEdit(newModeNotEdit);
             setEditIndex(null);
+            console.log('я тут handleInputBlur')
+            // updateRow();
         }
     };
 
-    const classForFirstElement = total === 1 ? style.first_element : '';
+    // function for create new row
 
-    // function for API
-    const [deleteRowApi, { isLoading, isError, error }] = useDeleteRowMutation()
-    const deleteRow = () => {
-        console.log(isLoading, isError, error)
-        alert(`delete row? ID = ${id}`)
-        deleteRowApi(id);
+    const createNewRow = () => {
+        console.log(id)
+        // нужно по id находить уровень на котором создавать эту строку(инпутов или сразу с значениями по умолчанию)
+        // и после делать эту строку инпутами?  
+        dispatch(newRow({
+            child: [],
+            equipmentCosts: 0,
+            estimatedProfit: 0,
+            id: 0,
+            machineOperatorSalary: 0,
+            mainCosts: 0,
+            materials: 0,
+            mimExploitation: 0,
+            overheads: 0,
+            rowName: '',
+            salary: 0,
+            supportCosts: 0,
+            total: 0,
+        }))
+        // alert('я тут createNewRow')
     }
-
 
     return (
         <div className={`${style.row} ${className}`}>
 
             <div className={style.row__item}>
+
                 <ul className={style.row__item_list}>
+
                     <li className={style.row__icon} style={{ paddingLeft: `${paddingLeft}px` }}>
                         <span
                             onMouseOver={() => setStateSvg(true)}
                             onMouseOut={() => setStateSvg(false)}
                             style={{ backgroundColor: `${stateSvg ? '#414144' : 'transparent'}` }}
-                            className={`${style.row__icon__svg} ${classForFirstElement}`}>
+                            className={`${style.row__icon__svg} ${isFirstRow && style.first_element}`}>
 
                             <svg
-                                onClick={() => alert('create new row?')}
-                                className={`${stateSvg && style.data_svg_active}`}
+                                onClick={createNewRow}
                                 width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M11.5556 0H1.77778C0.8 0 0 0.8 0 1.77778V14.2222C0 15.2 0.8 16 1.77778 16H14.2222C15.2 16 16 15.2 16 14.2222V4.44444L11.5556 0ZM3.55556 3.55556H8V5.33333H3.55556V3.55556ZM12.4444 12.4444H3.55556V10.6667H12.4444V12.4444ZM12.4444 8.88889H3.55556V7.11111H12.4444V8.88889ZM10.6667 5.33333V1.77778L14.2222 5.33333H10.6667Z" fill="#7890B2" />
                             </svg>
@@ -88,25 +114,25 @@ export const Row: React.FC<RowTypeProps> = ({
                             </svg>}
 
                         </span>
+
                     </li>
-                    {modeName ?
-                        <Input
-                            className={style.input_name}
-                            name=''
-                            value={name}
-                            onSend={() => setModeName(false)}
-                            onChange={(e) => setName(e.target.value)}
-                            onBlur={() => setModeName(false)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    setModeName(false);
-                                }
-                            }}
-                            autoFocus
-                        /> :
-                        <li className={style.row__name} onDoubleClick={() => setModeName(true)}>{name}</li>
+                    {modeName ? <Input
+                        className={style.input_name}
+                        name=''
+                        value={name}
+                        onSend={() => setModeName(false)}
+                        onChange={(e) => setName(e.target.value)}
+                        onBlur={() => setModeName(false)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                setModeName(false);
+                            }
+                        }}
+                        autoFocus
+                    /> : <li className={style.row__name} onDoubleClick={() => setModeName(true)}>{name}</li>
                     }
                 </ul>
+
             </div>
 
             <div className={style.row__item}>

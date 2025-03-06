@@ -1,5 +1,6 @@
+// GET ROWS
 export type CurrentRowType = {
-    child: CurrentRowType[]
+    child: CurrentRowType[] | [null],
     equipmentCosts: number,
     estimatedProfit: number,
     id: number,
@@ -11,11 +12,11 @@ export type CurrentRowType = {
     rowName: string,
     salary: number,
     supportCosts: number,
-    total: number
+    total: number,
 }
 
 // GET ROWS
-export type RowType = { child: CurrentRowType[] | [null] } & CurrentRowType
+// export type RowType = { child: CurrentRowType[] | [null] } & CurrentRowType
 
 // CREATE ROW
 export type RequestBodyType = {
@@ -26,7 +27,7 @@ export type RequestBodyType = {
     materials: number,
     mimExploitation: number,
     overheads: number,
-    parentId: number, // not
+    parentId: number,
     rowName: string,
     salary: number,
     supportCosts: number
@@ -39,6 +40,6 @@ export type ResponseBodyType = {
 
 // UPDATE ROW
 export type UpdateRequestBodyType = {
-    rId: string
-    body: Omit<CurrentRowType, 'id' | 'total'>
+    rId: number
+    body: Omit<CurrentRowType, 'id' | 'total' | 'child'>
 }

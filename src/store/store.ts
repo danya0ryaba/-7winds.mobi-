@@ -1,9 +1,9 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import userReducer from './reducers/useSlice'
+import rowsReducer from './reducers/useRows'
 import { rowsApi } from './API/rowsApi'
 
 export const rootReducer = combineReducers({
-    userReducer,
+    rowsReducer,
     [rowsApi.reducerPath]: rowsApi.reducer
 })
 
