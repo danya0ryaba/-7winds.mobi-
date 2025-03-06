@@ -1,7 +1,4 @@
-// GET
-
-export type RowType = {
-    child: unknown[],
+type CurrentRowType = {
     equipmentCosts: number,
     estimatedProfit: number,
     id: number,
@@ -16,9 +13,12 @@ export type RowType = {
     total: number
 }
 
-// ПОХОЖИЕ ТИПЫ ЧЕРЕЗ УТИЛИТЫ ЗАПИСАТЬ
+// GET ROWS
+//  УБРАТЬ unknown
+export type RowType = { child: unknown[] } & CurrentRowType
 
-// CREATE
+// CREATE ROW
+
 export type RequestBodyType = {
     equipmentCosts: number,
     estimatedProfit: number,
@@ -27,26 +27,19 @@ export type RequestBodyType = {
     materials: number,
     mimExploitation: number,
     overheads: number,
-    parentId: number,
+    parentId: number, // not
     rowName: string,
     salary: number,
     supportCosts: number
 }
 
 export type ResponseBodyType = {
-    current: {
-        id: number,
-        rowName: string,
-        total: number,
-        salary: number,
-        mimExploitation: number,
-        machineOperatorSalary: number,
-        materials: number,
-        mainCosts: number,
-        supportCosts: number,
-        equipmentCosts: number,
-        overheads: number,
-        estimatedProfit: number
-    },
-    changed: unknown[]
+    current: CurrentRowType,
+    changed: CurrentRowType[]
+}
+// UPDATE ROW
+
+export type UpdateRequestBodyType = {
+    rId: string
+    body: Omit<CurrentRowType, 'id' | 'total'>
 }

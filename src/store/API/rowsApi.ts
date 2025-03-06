@@ -1,41 +1,41 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { RowType } from '../../types/types'
+import { RequestBodyType, ResponseBodyType, RowType, UpdateRequestBodyType } from '../../types/types'
 
-export const BASE_URL = { baseUrl: 'http://185.244.172.108:8081/v1/outlay-rows/entity/148575/' }
+const apiUrl = import.meta.env.VITE_BASE_URL;
+const eId = import.meta.env.VITE_E_ID;
+
+export const BASE_URL = { baseUrl: apiUrl }
 
 export const rowsApi = createApi({
     reducerPath: 'rowsApi',
-    // tagTypes: ['Rows'],
     baseQuery: fetchBaseQuery(BASE_URL),
     endpoints: (builder) => ({
         getRows: builder.query<RowType[], void>({
-            query: () => 'row/list',
+            query: () => `${eId}/row/list`,
         }),
 
+        createRow: builder.mutation<ResponseBodyType, RequestBodyType>({
+            query: body => ({
+                url: `${eId}/row/create`,
+                method: 'POST',
+                body,
+            })
+        }),
 
-        // getCardId: builder.query<CardRequestType, string>({
-        //     query: (id) => `/items/${id}`,
-        //     providesTags: (_, __, id) => [{ type: 'Card', id }],
-        // }),
-        // createCard: builder.mutation<CardRequestType, CardRequestTypeWithoutId>({
-        //     query: body => ({
-        //         url: '/items',
-        //         method: 'POST',
-        //         body: { ...body }
-        //     }),
-        //     invalidatesTags: [{ type: 'Card', id: 'LIST' }],
-        // }),
-        // updateCard: builder.mutation<CardRequestType, { id: string; body: CardRequestTypeWithoutId }>({
-        //     query: ({ id, body }) => ({
-        //         url: `/items/${id}`,
-        //         method: 'PUT',
-        //         body: {
-        //             ...body
-        //         }
-        //     }),
-        //     invalidatesTags: (_, __, { id }) => [{ type: 'Card', id }],
-        // })
+        updateRow: builder.mutation<ResponseBodyType, UpdateRequestBodyType>({
+            query: ({ rId, body }) => ({
+                url: `${eId}/row/${rId}/update`,
+                method: 'POST',
+                body,
+            })
+        }),
 
+        deleteRow: builder.mutation<ResponseBodyType, string>({
+            query: (rId) => ({
+                url: `${eId}/row/${rId}/delete`,
+                method: 'DELETE',
+            })
+        }),
 
     }),
 })

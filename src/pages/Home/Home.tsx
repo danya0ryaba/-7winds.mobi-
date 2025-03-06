@@ -4,12 +4,9 @@ import { useGetRowsQuery } from '../../store/API/rowsApi'
 
 import style from './Home.module.scss'
 
-const rows2 = [0, 1, 2, 2]
-
 export const Home = () => {
 
     const { data: rows, isLoading, isError } = useGetRowsQuery();
-    console.log(rows, isLoading, isError)
 
     if (isLoading) {
         return <h1>Loading...</h1>
@@ -39,7 +36,7 @@ export const Home = () => {
                         </ul>
                     </div>
                 </div>
-                <Table values={rows2} />
+                <Table rowsArray={rows || []} />
             </div>
         </main>
     )
