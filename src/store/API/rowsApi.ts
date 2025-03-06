@@ -1,14 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { RowType } from '../../types/types'
 
 export const BASE_URL = { baseUrl: 'http://185.244.172.108:8081/v1/outlay-rows/entity/148575/' }
 
-// @ts-ignore
 export const rowsApi = createApi({
     reducerPath: 'rowsApi',
     // tagTypes: ['Rows'],
     baseQuery: fetchBaseQuery(BASE_URL),
     endpoints: (builder) => ({
-        getRows: builder.query({
+        getRows: builder.query<RowType[], void>({
             query: () => 'row/list',
         }),
 

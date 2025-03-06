@@ -8,8 +8,16 @@ const rows2 = [0, 1, 2, 2]
 
 export const Home = () => {
 
-    const { data: rows, isLoading, isError } = useGetRowsQuery('')
+    const { data: rows, isLoading, isError } = useGetRowsQuery();
     console.log(rows, isLoading, isError)
+
+    if (isLoading) {
+        return <h1>Loading...</h1>
+    }
+
+    if (isError) {
+        return <h1>Error</h1>
+    }
 
     return (
         <main>
