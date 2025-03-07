@@ -47,28 +47,5 @@ export const rowsSlice = createSlice({
     },
 })
 
-// Рекурсивная функция для поиска строки по id
-
-const findRowById = (rows: CurrentRowType[] | [null], id: number): CurrentRowType | undefined => {
-    if (!rows[0]) return undefined
-    for (const row of rows) {
-        if (row!.id === id) {
-            return row ?? undefined; // Возвращаем найденную строку
-        }
-        if (row!.child && row!.child.length > 0) {
-            const found = findRowById(row!.child, id);
-            if (found) {
-                return found; // Если нашли в дочерних элементах
-            }
-        }
-    }
-    return undefined; // Если не нашли
-};
-
-// Селектор для получения строки по id
-export const selectRowById = (state: UserState, id: number): CurrentRowType | undefined => {
-    return findRowById(state.rows, id);
-};
-
 export const { setRows, newRow, setLoading, setError } = rowsSlice.actions;
 export default rowsSlice.reducer

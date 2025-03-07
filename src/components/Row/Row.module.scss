@@ -26,6 +26,7 @@
         &_list {
             display: flex;
             align-items: center;
+            justify-content: end;
 
             .row__icon {
                 width: 110px;
@@ -80,25 +81,15 @@
 
             }
 
-            .input_name {
-                width: 100%;
-            }
-
-            .row__name {
-                width: 100%;
-
-                &:last-child {
-                    width: 733px;
-
-                    @media (max-width:1920px) {
-                        width: auto;
-                    }
-                }
-
-            }
-
             .row__text {
                 width: 200px;
+
+                &:first-child {
+                    position: absolute;
+                    left: 110px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
             }
 
             .row__input {

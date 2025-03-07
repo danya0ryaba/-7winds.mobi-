@@ -8,6 +8,8 @@
     background-color: #202124;
     color: white;
     caret-color: #71717A;
+    position: relative;
+    z-index: 100;
 
     &::placeholder {
         color: #71717A;
