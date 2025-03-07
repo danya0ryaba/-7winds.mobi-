@@ -16,7 +16,7 @@ export const rowsApi = createApi({
             providesTags: (result) =>
                 result ?
                     [...result.map(({ id }) => ({ type: 'Row' as const, id })), { type: 'Row', id: 'LIST' }]
-                    : [{ type: 'Row', id: 'LIST' }], // Указываем, что это список
+                    : [{ type: 'Row', id: 'LIST' }],
         }),
 
         createRow: builder.mutation<ResponseBodyType, RequestBodyType>({
@@ -25,7 +25,7 @@ export const rowsApi = createApi({
                 method: 'POST',
                 body,
             }),
-            invalidatesTags: [{ type: 'Row', id: 'LIST' }], // Указываем, что после создания строки нужно обновить список
+            invalidatesTags: [{ type: 'Row', id: 'LIST' }],
         }),
 
         updateRow: builder.mutation<ResponseBodyType, UpdateRequestBodyType>({
@@ -34,7 +34,7 @@ export const rowsApi = createApi({
                 method: 'POST',
                 body,
             }),
-            invalidatesTags: (result, error, { rId }) => [{ type: 'Row', id: rId }], // Обновляем конкретную строку
+            invalidatesTags: (result, error, { rId }) => [{ type: 'Row', id: rId }],
         }),
 
         deleteRow: builder.mutation<ResponseBodyType, number>({

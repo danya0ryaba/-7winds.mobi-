@@ -1,7 +1,6 @@
+// ДОБАВИТЬ ПРОВЕРКУ ЧТОБЫ ПРИ РЕЖИМЕ РЕДАКТИРОВАНИЯ ИНПУТОВ НЕЛЬЗЯ БЫЛО УДАЛИТЬ  
 
-// // ДОБАВИТЬ ПРОВЕРКУ ЧТОБЫ ПРИ РЕЖИМЕ РЕДАКТИРОВАНИЯ ИНПУТОВ НЕЛЬЗЯ БЫЛО УДАЛИТЬ  
-
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Input } from '../Input/Input';
 import { CurrentRowType, RequestBodyType } from '../../types/types';
 import { newRow } from '../../store/reducers/useRows';
@@ -14,6 +13,7 @@ type RowTypeProps = {
     paddingLeft?: number;
     isFirstRow: boolean;
     isEditing: boolean;
+    parentId: number | null;
     deleteRow: () => void;
     submitNewRow: (body: RequestBodyType) => void;
 } & CurrentRowType;
@@ -30,6 +30,7 @@ export const Row: React.FC<RowTypeProps> = ({
     isFirstRow,
     deleteRow,
     isEditing,
+    parentId,
     submitNewRow,
 }) => {
 
@@ -40,14 +41,13 @@ export const Row: React.FC<RowTypeProps> = ({
     const inputRef = useRef<HTMLInputElement>(null);
 
     const dispatch = useAppDispatch();
-    let myId = useId().split(':')[1][1];
 
     const createNewRow = (parentId: number) => {
         const newChildRow: CurrentRowType = {
             child: [],
             equipmentCosts: 0,
             estimatedProfit: 0,
-            id: Number(myId),
+            id: parentId,
             machineOperatorSalary: 0,
             mainCosts: 0,
             materials: 0,
@@ -87,25 +87,22 @@ export const Row: React.FC<RowTypeProps> = ({
         };
     }, []);
 
-    const handleEditDoubleClick = () => {
-        setIsEditingAll(true);
-    }
-    console.log(id);
-    const onSumbit = () => {
+    const handleEditDoubleClick = () => setIsEditingAll(true);
+
+    const onSumbit = (parentId: number) => {
         const body: RequestBodyType = {
-            equipmentCosts: modeNotEdit[2] as number,
-            estimatedProfit: modeNotEdit[4] as number,
+            equipmentCosts: Number(modeNotEdit[2]),
+            estimatedProfit: Number(modeNotEdit[4]),
             machineOperatorSalary: 0,
             mainCosts: 0,
             materials: 0,
             mimExploitation: 0,
-            overheads: modeNotEdit[3] as number,
-            parentId: id,
+            overheads: Number(modeNotEdit[3]),
+            parentId: parentId,
             rowName: modeNotEdit[0] as string,
-            salary: modeNotEdit[1] as number,
+            salary: Number(modeNotEdit[1]),
             supportCosts: 0
         }
-
         submitNewRow(body);
     }
 
@@ -134,35 +131,31 @@ export const Row: React.FC<RowTypeProps> = ({
             </div>
 
             <div className={style.row__item}>
-
                 <ul className={style.row__item_list}>
-                    {isEditingAll ? (
-                        modeNotEdit.map((_, index) => (
-                            <li key={index} className={style.row__text}>
-                                <Input
-                                    ref={inputRef}
-                                    className={style.row__input}
-                                    value={modeNotEdit[index]}
-                                    onChange={(e) => handleInputChange(index, e.target.value)}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter') {
-                                            onSumbit();
-                                        }
-                                    }}
-                                    autoFocus
-                                />
-                            </li>
-                        ))
-                    ) : (
-                        modeNotEdit.map((item, index) => (
-                            <li key={index} className={style.row__text}>
-                                <span onDoubleClick={handleEditDoubleClick}>{item}</span>
-                            </li>
-                        ))
+                    {isEditingAll ? modeNotEdit.map((_, index) => (
+                        <li key={index} className={style.row__text}>
+                            <Input
+                                ref={inputRef}
+                                className={style.row__input}
+                                value={modeNotEdit[index]}
+                                onChange={(e) => handleInputChange(index, e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        onSumbit(Number(parentId));
+                                    }
+                                }}
+                                autoFocus
+                            />
+                        </li>)
+                    ) : (modeNotEdit.map((item, index) => (
+                        <li key={index} className={style.row__text}>
+                            <span onDoubleClick={handleEditDoubleClick}>{item}</span>
+                        </li>
+                    ))
                     )}
                 </ul>
-
             </div>
+
         </div>
     );
 };
