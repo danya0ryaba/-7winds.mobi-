@@ -1,40 +1,54 @@
-import { useCreateRowMutation, useDeleteRowMutation } from '../../store/API/rowsApi';
-import { useAppSelector } from '../../store/hooks/redux';
-import { CurrentRowType, RequestBodyType } from '../../types/types';
+import { useDeleteRowMutation } from '../../store/API/rowsApi';
+import { useAppDispatch, useAppSelector } from '../../store/hooks/redux';
+import { newRow } from '../../store/reducers/useRows';
+import { CurrentRowType } from '../../types/types';
 import { Row } from '../Row/Row';
 
 import style from './Table.module.scss';
 
-type TableType = {
-    rowsArray: CurrentRowType[]
-}
+export const Table: React.FC = () => {
 
-export const Table: React.FC<TableType> = ({
-    rowsArray,
-}) => {
+    // const dispatch = useAppDispatch()
 
     const { rows } = useAppSelector(state => state.rowsReducer)
-    console.log('я в Table')
-    console.log(rows)
+    // console.log(rows);
     // function for API
     const [deleteRowApi] = useDeleteRowMutation()
     const deleteRow = (id: number) => {
-        alert(`delete row? ID = ${id}`)
         deleteRowApi(id);
     }
-    const [createRowApi] = useCreateRowMutation();
-    const createRow = (body: RequestBodyType) => {
-        createRowApi(body);
-    }
+
+    // const createNewRow = (parentId: number) => {
+
+    //     console.log('Создание нового Row для родителя с id: ' + parentId);
+    //     const newChildRow: CurrentRowType = {
+    //         child: [],
+    //         equipmentCosts: 0,
+    //         estimatedProfit: 0,
+    //         id: Date.now(), // Используйте уникальный идентификатор
+    //         machineOperatorSalary: 0,
+    //         mainCosts: 0,
+    //         materials: 0,
+    //         mimExploitation: 0,
+    //         overheads: 0,
+    //         rowName: '',
+    //         salary: 0,
+    //         supportCosts: 0,
+    //         total: 0,
+    //     };
+    //     dispatch(newRow({ parentId, newChildRow }));
+
+    // }
+
 
     const renderRows = (rows: CurrentRowType[], paddingLeft: number = 0, isFirst: boolean = true) => {
         return rows.map((row, index) => {
             const isFirstRow = isFirst && index === 0;
-            return (<span key={row.id}>
+            return (<span key={row.id + index}>
                 <Row
                     {...row}
+                    // createNewRow={createNewRow}
                     deleteRow={() => deleteRow(row.id)}
-                    // updateRow={() => updateRow({ rId: row.id, body: row })}
                     isFirstRow={isFirstRow}
                     paddingLeft={paddingLeft}
                 />
@@ -49,7 +63,7 @@ export const Table: React.FC<TableType> = ({
 
     return (
         <div className={style.table}>
-            {renderRows(rowsArray)}
+            {renderRows(rows)}
         </div>
     );
 }

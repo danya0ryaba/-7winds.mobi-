@@ -1,16 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from '../Input/Input'
 import { CurrentRowType } from '../../types/types'
+import { newRow, selectRowById } from '../../store/reducers/useRows'
+import { useAppDispatch, useAppSelector } from '../../store/hooks/redux'
 
 import style from './Row.module.scss'
-import { useAppDispatch } from '../../store/hooks/redux'
-import { newRow } from '../../store/reducers/useRows'
 
 type RowTypeProps = {
     className?: string
     paddingLeft?: number
     isFirstRow: boolean
     deleteRow: () => void
+    // createNewRow: (id: number) => void
     // updateRow: () => void
 } & CurrentRowType
 
@@ -25,20 +26,20 @@ export const Row: React.FC<RowTypeProps> = ({
     paddingLeft,
     isFirstRow,
     deleteRow,
+    // createNewRow,
     // updateRow,
 }) => {
 
-    const dispatch = useAppDispatch()
     // for list prices rows
     const [modeNotEdit, setModeNotEdit] = useState<Array<number | string>>([salary, equipmentCosts, overheads, estimatedProfit]);
-    const [editIndex, setEditIndex] = useState<null | number>(null); // Индекс редактируемого элемента
+    const [editIndex, setEditIndex] = useState<null | number>(null);
     const [editValue, setEditValue] = useState('');
 
     // for list name row
     const [name, setName] = useState(rowName)
     const [modeName, setModeName] = useState(false)
 
-    // for view delete svg
+    // for view basket svg
     const [stateSvg, setStateSvg] = useState(false)
 
     const onChangeMode = (index: number) => {
@@ -61,17 +62,38 @@ export const Row: React.FC<RowTypeProps> = ({
         }
     };
 
-    // function for create new row
+    const dispatch = useAppDispatch()
 
-    const createNewRow = () => {
-        console.log(id)
-        // нужно по id находить уровень на котором создавать эту строку(инпутов или сразу с значениями по умолчанию)
-        // и после делать эту строку инпутами?  
-        dispatch(newRow({
+    // const createNewRow = async (parentId: number) => {
+
+    //     console.log('Создание нового Row для родителя с id: ' + parentId);
+    //     const newChildRow: CurrentRowType = {
+    //         child: [],
+    //         equipmentCosts: 0,
+    //         estimatedProfit: 0,
+    //         id: Date.now(), // Используйте уникальный идентификатор
+    //         machineOperatorSalary: 0,
+    //         mainCosts: 0,
+    //         materials: 0,
+    //         mimExploitation: 0,
+    //         overheads: 0,
+    //         rowName: '',
+    //         salary: 0,
+    //         supportCosts: 0,
+    //         total: 0,
+    //     };
+    //     dispatch(newRow({ parentId, newChildRow }));
+    //     const row = useAppSelector(state => selectRowById(state.rowsReducer, newChildRow.id));
+    //     console.log(row);
+    // }
+
+    const createNewRow = (parentId: number) => {
+        console.log('Создание нового Row для родителя с id: ' + parentId);
+        const newChildRow: CurrentRowType = {
             child: [],
             equipmentCosts: 0,
             estimatedProfit: 0,
-            id: 0,
+            id: Date.now(), // Используйте уникальный идентификатор
             machineOperatorSalary: 0,
             mainCosts: 0,
             materials: 0,
@@ -81,9 +103,21 @@ export const Row: React.FC<RowTypeProps> = ({
             salary: 0,
             supportCosts: 0,
             total: 0,
-        }))
-        // alert('я тут createNewRow')
-    }
+        };
+        dispatch(newRow({ parentId, newChildRow }));
+        console.log(newChildRow.id);
+    };
+
+    // useEffect для отслеживания новой строки
+    // useEffect(() => {
+    //     const fetchNewRow = async () => {
+    //         const newRowId = await createNewRow(id);
+    //         const row = selectRowById(useAppSelector((state) => state.rowsReducer), newRowId);
+    //         console.log('Созданная строка:', row);
+    //     };
+
+    //     fetchNewRow();
+    // }, [id]);
 
     return (
         <div className={`${style.row} ${className}`}>
@@ -100,7 +134,7 @@ export const Row: React.FC<RowTypeProps> = ({
                             className={`${style.row__icon__svg} ${isFirstRow && style.first_element}`}>
 
                             <svg
-                                onClick={createNewRow}
+                                onClick={() => createNewRow(id)}
                                 width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M11.5556 0H1.77778C0.8 0 0 0.8 0 1.77778V14.2222C0 15.2 0.8 16 1.77778 16H14.2222C15.2 16 16 15.2 16 14.2222V4.44444L11.5556 0ZM3.55556 3.55556H8V5.33333H3.55556V3.55556ZM12.4444 12.4444H3.55556V10.6667H12.4444V12.4444ZM12.4444 8.88889H3.55556V7.11111H12.4444V8.88889ZM10.6667 5.33333V1.77778L14.2222 5.33333H10.6667Z" fill="#7890B2" />
                             </svg>
@@ -117,9 +151,9 @@ export const Row: React.FC<RowTypeProps> = ({
 
                     </li>
                     {modeName ? <Input
-                        className={style.input_name}
                         name=''
                         value={name}
+                        className={style.input_name}
                         onSend={() => setModeName(false)}
                         onChange={(e) => setName(e.target.value)}
                         onBlur={() => setModeName(false)}

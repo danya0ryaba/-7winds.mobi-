@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Table } from '../../components/Table/Table'
 import { table_title } from '../../constants/constants'
 import { useGetRowsQuery } from '../../store/API/rowsApi'
-import { useAppDispatch, useAppSelector } from '../../store/hooks/redux'
+import { useAppDispatch } from '../../store/hooks/redux'
 import { setRows } from '../../store/reducers/useRows'
 
 import style from './Home.module.scss'
@@ -10,8 +10,6 @@ import style from './Home.module.scss'
 export const Home = () => {
 
     const dispatch = useAppDispatch()
-
-    // const { rows }=useAppSelector(state => state.rowsReducer)
 
     const { data: rows, isLoading, isError } = useGetRowsQuery();
 
@@ -48,7 +46,7 @@ export const Home = () => {
                         </ul>
                     </div>
                 </div>
-                <Table rowsArray={Array.isArray(rows) ? rows : []} />
+                <Table />
             </div>
         </main>
     )

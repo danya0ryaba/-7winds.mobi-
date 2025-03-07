@@ -15,9 +15,6 @@ export type CurrentRowType = {
     total: number,
 }
 
-// GET ROWS
-// export type RowType = { child: CurrentRowType[] | [null] } & CurrentRowType
-
 // CREATE ROW
 export type RequestBodyType = {
     equipmentCosts: number,
