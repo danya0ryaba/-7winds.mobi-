@@ -37,6 +37,6 @@ export type ResponseBodyType = {
 
 // UPDATE ROW
 export type UpdateRequestBodyType = {
-    rId: number
+    rId: number,
     body: Omit<CurrentRowType, 'id' | 'total' | 'child'>
 }

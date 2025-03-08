@@ -9,7 +9,7 @@ export const BASE_URL = { baseUrl: apiUrl };
 export const rowsApi = createApi({
     reducerPath: 'rowsApi',
     baseQuery: fetchBaseQuery(BASE_URL),
-    tagTypes: ['Row'], // Добавляем тип тегов
+    tagTypes: ['Row'],
     endpoints: (builder) => ({
         getRows: builder.query<CurrentRowType[], void>({
             query: () => `${eId}/row/list`,
@@ -18,7 +18,6 @@ export const rowsApi = createApi({
                     [...result.map(({ id }) => ({ type: 'Row' as const, id })), { type: 'Row', id: 'LIST' }]
                     : [{ type: 'Row', id: 'LIST' }],
         }),
-
         createRow: builder.mutation<ResponseBodyType, RequestBodyType>({
             query: (body) => ({
                 url: `${eId}/row/create`,
@@ -27,16 +26,14 @@ export const rowsApi = createApi({
             }),
             invalidatesTags: [{ type: 'Row', id: 'LIST' }],
         }),
-
         updateRow: builder.mutation<ResponseBodyType, UpdateRequestBodyType>({
             query: ({ rId, body }) => ({
                 url: `${eId}/row/${rId}/update`,
                 method: 'POST',
                 body,
             }),
-            invalidatesTags: (result, error, { rId }) => [{ type: 'Row', id: rId }],
+            invalidatesTags: (_, __, { rId }) => [{ type: 'Row', id: rId }],
         }),
-
         deleteRow: builder.mutation<ResponseBodyType, number>({
             query: (rId) => ({
                 url: `${eId}/row/${rId}/delete`,

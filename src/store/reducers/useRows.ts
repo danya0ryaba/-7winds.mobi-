@@ -26,7 +26,7 @@ export const rowsSlice = createSlice({
             const addRowToParent = (rows: any[]) => {
                 for (const row of rows) {
                     if (row.id === parentId) {
-                        row.child.push(newChildRow); // Добавляем новый Row в child родительского Row
+                        row.child.push(newChildRow); // Добавляю новый Row в child родительского Row
                         return true; // Успешно добавлено
                     }
                     if (row.child && row.child.length > 0) {
@@ -36,7 +36,7 @@ export const rowsSlice = createSlice({
                 }
                 return false; // Если не найден родитель
             };
-            addRowToParent(state.rows); // Запускаем рекурсивную функцию
+            addRowToParent(state.rows); // рекурсивно вызываю функцию
         },
         setLoading(state, action: PayloadAction<boolean>) {
             state.isLoading = action.payload;

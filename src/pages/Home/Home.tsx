@@ -14,7 +14,7 @@ export const Home = () => {
     const { data: rows, isLoading, isError } = useGetRowsQuery();
 
     useEffect(() => {
-        if (!rows) return
+        if (!rows) return;
         dispatch(setRows(rows))
     }, [rows, dispatch])
 
@@ -31,7 +31,6 @@ export const Home = () => {
             <div className={style.home_tab}>
                 <h3 className={style.home_tab__title}>Строительно-монтажные работы</h3>
             </div>
-
             <div className="container">
                 <div className={style.table_title}>
                     <div className={style.table_title__item}>
