@@ -1,20 +1,21 @@
 @use 'scss-reset/reset';
 @use 'variables/variables';
+@use './variables/variables.scss' as *;
 
 body {
     font-family: "Roboto", sans-serif;
     font-weight: 400;
-    background-color: #27272A;
-    color: #FFFFFF;
+    background-color: $bg-second;
+    color: $white;
     font-size: 14px;
     line-height: 16.41px;
     box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 .wrapper {
-    overflow-x: hidden;
     width: 100%;
-    background-color: #202124;
+    background-color: $bg-main;
     position: relative;
 }
 
@@ -23,7 +24,7 @@ body {
     position: absolute;
     top: 47px;
     left: 234px;
-    background-color: #202124;
+    background-color: $bg-main;
 }
 
 .container {

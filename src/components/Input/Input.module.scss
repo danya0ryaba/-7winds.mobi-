@@ -1,17 +1,19 @@
+@use '../../styles/variables/variables.scss' as *;
+
 .input {
     height: 36px;
     line-height: 18.2px;
     letter-spacing: 0.1px;
     padding: 10px;
-    border: 1px solid #414144;
+    border: 1px solid $border;
     border-radius: 6px;
-    background-color: #202124;
+    background-color: $bg-main;
     color: white;
-    caret-color: #71717A;
+    caret-color: $text-placeholder;
     position: relative;
     z-index: 100;
 
     &::placeholder {
-        color: #71717A;
+        color: $text-placeholder;
     }
 }

@@ -41,6 +41,7 @@ export const Row: React.FC<RowTypeProps> = ({
 
     const dispatch = useAppDispatch();
 
+    // для создания новой строки на клиенте
     const createNewRow = (parentId: number) => {
         const newChildRow: CurrentRowType = {
             child: [],
@@ -60,13 +61,30 @@ export const Row: React.FC<RowTypeProps> = ({
         dispatch(newRow({ parentId, newChildRow }));
         setIsEditingAll(false);
     };
-
+    // для отправки новой строки на сервер
+    const handleSumbitRow = (parentId: number) => {
+        const body: RequestBodyType = {
+            equipmentCosts: Number(modeNotEdit[2]),
+            estimatedProfit: Number(modeNotEdit[4]),
+            machineOperatorSalary: 0,
+            mainCosts: 0,
+            materials: 0,
+            mimExploitation: 0,
+            overheads: Number(modeNotEdit[3]),
+            parentId: parentId,
+            rowName: modeNotEdit[0] as string,
+            salary: Number(modeNotEdit[1]),
+            supportCosts: 0
+        }
+        submitNewRow(body);
+    }
+    // для изменения строк
     const handleInputChange = (index: number, value: string) => {
         const newModeNotEdit = [...modeNotEdit];
         newModeNotEdit[index] = value;
         setModeNotEdit(newModeNotEdit);
     };
-
+    // =========================================================
     const handleClickOutside = (event: MouseEvent) => {
         const target = event.target as Node;
         const tagName = (target as HTMLElement).tagName;
@@ -85,26 +103,7 @@ export const Row: React.FC<RowTypeProps> = ({
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-
-    const handleEditDoubleClick = () => setIsEditingAll(true);
-
-    const handleSumbitRow = (parentId: number) => {
-        const body: RequestBodyType = {
-            equipmentCosts: Number(modeNotEdit[2]),
-            estimatedProfit: Number(modeNotEdit[4]),
-            machineOperatorSalary: 0,
-            mainCosts: 0,
-            materials: 0,
-            mimExploitation: 0,
-            overheads: Number(modeNotEdit[3]),
-            parentId: parentId,
-            rowName: modeNotEdit[0] as string,
-            salary: Number(modeNotEdit[1]),
-            supportCosts: 0
-        }
-        submitNewRow(body);
-    }
-
+    //  для обновления строки
     const handleUpdateRow = () => {
         const body: UpdateRequestBodyType = {
             rId: parentId as number,
@@ -123,7 +122,7 @@ export const Row: React.FC<RowTypeProps> = ({
         }
         updateRow(body);
     }
-
+    // =========================================================
     const onSubmitOrUpdateRow = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             handleSumbitRow(Number(parentId));
@@ -147,12 +146,7 @@ export const Row: React.FC<RowTypeProps> = ({
                             className={`${style.row__icon__svg} ${isFirstRow && style.first_element}`}>
 
                             <button disabled={isEditingAll}>
-                                <svg onClick={() => {
-                                    if (!isEditingAll) {
-                                        createNewRow(id)
-                                    };
-                                }
-                                }
+                                <svg onClick={() => !isEditingAll && createNewRow(id)}
                                     width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M11.5556 0H1.77778C0.8 0 0 0.8 0 1.77778V14.2222C0 15.2 0.8 16 1.77778 16H14.2222C15.2 16 16 15.2 16 14.2222V4.44444L11.5556 0ZM3.55556 3.55556H8V5.33333H3.55556V3.55556ZM12.4444 12.4444H3.55556V10.6667H12.4444V12.4444ZM12.4444 8.88889H3.55556V7.11111H12.4444V8.88889ZM10.6667 5.33333V1.77778L14.2222 5.33333H10.6667Z" fill="#7890B2" />
                                 </svg>
@@ -173,7 +167,7 @@ export const Row: React.FC<RowTypeProps> = ({
                         <li key={index} className={style.row__text}>
                             <Input
                                 ref={inputRef}
-                                className={style.row__input}
+                                className={`${style.row__input} ${index === 0 && style.row__input_first} ${index === modeNotEdit.length - 1 && style.row__input_last}`}
                                 value={modeNotEdit[index]}
                                 onChange={(e) => handleInputChange(index, e.target.value)}
                                 onKeyDown={onSubmitOrUpdateRow}
@@ -181,8 +175,8 @@ export const Row: React.FC<RowTypeProps> = ({
                             />
                         </li>)
                     ) : (modeNotEdit.map((item, index) => (
-                        <li key={index} className={style.row__text}>
-                            <span onDoubleClick={handleEditDoubleClick}>{item}</span>
+                        <li key={index} className={`${style.row__text}`}>
+                            <span onDoubleClick={() => setIsEditingAll(true)}>{item}</span>
                         </li>
                     ))
                     )}

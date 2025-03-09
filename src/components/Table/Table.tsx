@@ -8,7 +8,7 @@ import style from './Table.module.scss';
 export const Table = () => {
 
     const { rows } = useAppSelector(state => state.rowsReducer);
-
+    console.log(rows)
     const [deleteRowApi] = useDeleteRowMutation();
     const deleteRow = (id: number) => deleteRowApi(id);
 
@@ -18,11 +18,11 @@ export const Table = () => {
     const [updateRowApi] = useUpdateRowMutation();
     const updateRow = (body: UpdateRequestBodyType) => updateRowApi(body);
 
-    const renderRows = (rows: CurrentRowType[], paddingLeft: number = 0, isFirst: boolean = true, isEditingNewRow: boolean = false) => {
+    const renderRows = (rows: CurrentRowType[], paddingLeft: number = 0, isFirst: boolean = true) => {
         return rows.map((row, index) => {
             const isFirstRow = isFirst && index === 0;
-            const isNewRow = row.rowName === ''; // Условие, чтобы определить новую строку
-            const isEditing = isNewRow ? true : false; // Новая строка в режиме редактирования
+            // const isNewRow = row.rowName === ''; // Условие, чтобы определить новую строку
+            const isEditing = row.rowName === '' ? true : false; // Новая строка в режиме редактирования
             return (
                 <span key={row.id + index}>
                     <Row
