@@ -8,7 +8,7 @@ import style from './Table.module.scss';
 export const Table = () => {
 
     const { rows } = useAppSelector(state => state.rowsReducer);
-    console.log(rows)
+
     const [deleteRowApi] = useDeleteRowMutation();
     const deleteRow = (id: number) => deleteRowApi(id);
 
