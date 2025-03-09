@@ -18,10 +18,9 @@ type RowTypeProps = {
     deleteRow: () => void;
     updateRow: (body: UpdateRequestBodyType) => void;
     submitNewRow: (body: RequestBodyType) => void;
-} & CurrentRowType;
+} & RequestBodyType;
 
 export const Row: React.FC<RowTypeProps> = ({
-    id,
     rowName,
     salary,
     equipmentCosts,
@@ -39,18 +38,19 @@ export const Row: React.FC<RowTypeProps> = ({
     const [modeNotEdit, setModeNotEdit] = useState<Array<number | string>>([rowName, salary, equipmentCosts, overheads, estimatedProfit]);
     const [isEditingAll, setIsEditingAll] = useState(isEditing);
     const [stateSvg, setStateSvg] = useState(false);
-
     const inputRef = useRef<HTMLInputElement>(null);
 
     const dispatch = useAppDispatch();
 
+    const paddingForRow = paddingLeft ? paddingLeft / 4 : 0;
+
     // для создания новой строки на клиенте
-    const createNewRow = (parentId: number) => {
+    const createNewRow = (parentId: number | null) => {
         const newChildRow: CurrentRowType = {
             child: [],
             equipmentCosts: 0,
             estimatedProfit: 0,
-            id: parentId,
+            id: parentId ?? 0,
             machineOperatorSalary: 0,
             mainCosts: 0,
             materials: 0,
@@ -59,13 +59,13 @@ export const Row: React.FC<RowTypeProps> = ({
             rowName: '',
             salary: 0,
             supportCosts: 0,
-            total: 0,
+            total: 0
         };
         dispatch(newRow({ parentId, newChildRow }));
         setIsEditingAll(false);
     };
     // для отправки новой строки на сервер
-    const handleSumbitRow = (parentId: number) => {
+    const handleSumbitRow = (parentId: number | null) => {
         const body: RequestBodyType = {
             equipmentCosts: Number(modeNotEdit[2]),
             estimatedProfit: Number(modeNotEdit[4]),
@@ -80,7 +80,7 @@ export const Row: React.FC<RowTypeProps> = ({
             supportCosts: 0
         }
         submitNewRow(body);
-    }
+    };
     // для изменения строк
     const handleInputChange = (index: number, value: string) => {
         const newModeNotEdit = [...modeNotEdit];
@@ -124,21 +124,27 @@ export const Row: React.FC<RowTypeProps> = ({
             }
         }
         updateRow(body);
-    }
+    };
     // =========================================================
     const onSubmitOrUpdateRow = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
-            handleSumbitRow(Number(parentId));
+        switch (event.key) {
+            case 'Enter':
+                handleSumbitRow(parentId);
+                break;
+            case 'Shift':
+                handleUpdateRow();
+                setIsEditingAll(false);
+                break;
+            case 'Escape':
+                setIsEditingAll(false);
+                break;
+            default:
+                break;
         }
-        if (event.key === 'Shift') {
-            handleUpdateRow();
-            setIsEditingAll(false);
-        }
-    }
+    };
 
     return (
         <div className={`${style.row} ${className}`}>
-
             <div className={style.row__item}>
                 <ul className={style.row__item_list}>
                     <li className={style.row__icon} style={{ paddingLeft: `${paddingLeft}px` }}>
@@ -148,15 +154,14 @@ export const Row: React.FC<RowTypeProps> = ({
                             style={{ backgroundColor: `${stateSvg && !isEditingAll ? '#414144' : 'transparent'}` }}
                             className={`${style.row__icon__svg} ${isFirstRow && style.first_element}`}>
                             <button disabled={isEditingAll}>
-                                <RowIcon onClick={() => !isEditingAll && createNewRow(id)} />
+                                <RowIcon onClick={() => !isEditingAll && createNewRow(parentId)} />
                             </button>
                             {stateSvg && !isEditingAll && <BasketIcon onClick={deleteRow} />}
                         </span>
                     </li>
                 </ul>
             </div>
-
-            <div className={style.row__item}>
+            <div className={style.row__item} style={{ paddingLeft: `${paddingForRow}px` }}>
                 <ul className={style.row__item_list}>
                     {isEditingAll ? modeNotEdit.map((_, index) => (
                         <li key={index} className={style.row__text}>
@@ -176,7 +181,6 @@ export const Row: React.FC<RowTypeProps> = ({
                     )}
                 </ul>
             </div>
-
         </div>
     );
 };

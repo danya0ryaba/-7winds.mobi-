@@ -20,23 +20,22 @@ export const rowsSlice = createSlice({
         setRows(state, action: PayloadAction<CurrentRowType[]>) {
             state.rows = action.payload;
         },
-        // убрать any!
-        newRow(state, action: PayloadAction<{ parentId: number; newChildRow: CurrentRowType }>) {
+        newRow(state, action: PayloadAction<{ parentId: number | null; newChildRow: CurrentRowType }>) {
             const { parentId, newChildRow } = action.payload;
-            const addRowToParent = (rows: any[]) => {
+            const addRowToParent = (rows: CurrentRowType[]) => {
                 for (const row of rows) {
                     if (row.id === parentId) {
-                        row.child.push(newChildRow); // Добавляю новый Row в child родительского Row
-                        return true; // Успешно добавлено
+                        row.child.push(newChildRow);
+                        return true;
                     }
                     if (row.child && row.child.length > 0) {
                         const found = addRowToParent(row.child);
-                        if (found) return true; // Если добавлено в дочерние элементы
+                        if (found) return true;
                     }
                 }
-                return false; // Если не найден родитель
+                return false;
             };
-            addRowToParent(state.rows); // рекурсивно вызываю функцию
+            addRowToParent(state.rows);
         },
         setLoading(state, action: PayloadAction<boolean>) {
             state.isLoading = action.payload;

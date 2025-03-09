@@ -1,6 +1,6 @@
 // GET ROWS
 export type CurrentRowType = {
-    child: CurrentRowType[] | [null],
+    child: CurrentRowType[],
     equipmentCosts: number,
     estimatedProfit: number,
     id: number,

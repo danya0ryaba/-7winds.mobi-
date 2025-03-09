@@ -4,13 +4,13 @@ import { table_title } from '../../constants/constants'
 import { useGetRowsQuery } from '../../store/API/rowsApi'
 import { useAppDispatch } from '../../store/hooks/redux'
 import { setRows } from '../../store/reducers/useRows'
+import { Error } from '../Error/Error'
 
 import style from './Home.module.scss'
 
 export const Home = () => {
 
     const dispatch = useAppDispatch()
-
     const { data: rows, isLoading, isError } = useGetRowsQuery();
 
     useEffect(() => {
@@ -23,7 +23,7 @@ export const Home = () => {
     }
 
     if (isError) {
-        return <h1>Error</h1>
+        return <Error />
     }
 
     return (

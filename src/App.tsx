@@ -9,16 +9,12 @@ function App() {
 
   return (
     <>
-      {/* <main className='container'> */}
       <Routes>
         <Route path='/' element={<MainLayout />}>
-
           <Route path='' element={<Home />} />
           <Route path='*' element={<Error />} />
-
         </Route>
       </Routes>
-      {/* </main> */}
     </>
   )
 }

@@ -9,7 +9,7 @@ import { BrowserRouter } from 'react-router-dom'
 const store = setupStore()
 
 createRoot(document.getElementById('root')!).render(
-  <BrowserRouter>
+  <BrowserRouter basename='/-7winds.mobi-/'>
     <Provider store={store}>
       <App />
     </Provider>

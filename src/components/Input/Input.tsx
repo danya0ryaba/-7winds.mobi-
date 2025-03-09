@@ -4,7 +4,6 @@ export interface InputType
     extends React.InputHTMLAttributes<HTMLInputElement> {
     ref?: React.Ref<HTMLInputElement>;
     className?: string;
-    name?: string;
     onSend?: () => void;
 }
 
@@ -12,7 +11,6 @@ export const Input: React.FC<InputType> = ({
     placeholder,
     type = 'text',
     className,
-    name = '',
     onSend,
     ref,
     ...otherProps

@@ -19,12 +19,35 @@ export const Table = () => {
     const updateRow = (body: UpdateRequestBodyType) => updateRowApi(body);
 
     const renderRows = (rows: CurrentRowType[], paddingLeft: number = 0, isFirst: boolean = true) => {
+        if (rows.length === 0) {
+            return (
+                <Row
+                    key={0 + '_empty'}
+                    deleteRow={() => deleteRow(0)}
+                    updateRow={updateRow}
+                    submitNewRow={submitNewRow}
+                    parentId={null}
+                    isFirstRow={isFirst}
+                    isEditing={true}
+                    equipmentCosts={0}
+                    estimatedProfit={0}
+                    machineOperatorSalary={0}
+                    mainCosts={0}
+                    materials={0}
+                    mimExploitation={0}
+                    overheads={0}
+                    rowName={''}
+                    salary={0}
+                    supportCosts={0}
+                    paddingLeft={paddingLeft}
+                />
+            );
+        }
         return rows.map((row, index) => {
             const isFirstRow = isFirst && index === 0;
-            // const isNewRow = row.rowName === ''; // Условие, чтобы определить новую строку
-            const isEditing = row.rowName === '' ? true : false; // Новая строка в режиме редактирования
+            const isEditing = row.rowName === ''; // новая строка в режиме редактирования
             return (
-                <span key={row.id + index}>
+                <span key={row.id + row.rowName + index}>
                     <Row
                         {...row}
                         parentId={row.id}
@@ -40,13 +63,9 @@ export const Table = () => {
             );
         });
     };
-
     return (
         <div className={style.table}>
             {renderRows(rows)}
         </div>
     );
 }
-
-
-// МОЖЕТ ПОЛНОСТЬЮ УБРАТЬ СТЕЙТ?
